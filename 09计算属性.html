@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>12.计算属性.html</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>12.计算属性.html</h2>
+
+        <p v-for="(item,index) in goods">
+            {{item.name}}:{{item.price}}
+        </p>
+        <!-- 我们需要一个新的数据项 总价，它的特点是：要依赖于已有数据项计算出来 -->
+        <p>总价：{{tol + '元'}}</p>
+        <!-- 
+       TODO:作业：补充一个计算属性来计算单价超过2000元的商品有几件 
+      如下同学要写完之后，交作业给我检查：
+        5个：邹亮， 李守海，陈利， 王芳， 方舒
+      1. 作业方式：代码截图，效果截图
+      2. 交给我的方式：发一个网络地址给我，让我能访问到。
+      -->
+        <p>单价超过2000元的商品有{{c2000}}件！</p>
+    </div>
+    <script>
+        // 计算属性
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                goods: [
+                    { name: '电脑', price: 5010 },
+                    { name: '手机', price: 1205 },
+                    { name: '平板', price: 1599 }
+                ]
+            },
+            // 它是一个对象，用来收集所有的计算属性
+            computed: {
+                // 可能存在的问题
+                // 1.命名过于随意
+                // 2. 代码不够优雅。
+                //    没有用箭头函数；箭头函数的简写不够彻底；没有用filter（forEach）;
+                c2000() {
+                    return this.goods.filter(item => item.price > 2000).length
+                },
+                // const m = this.goods[0].price + this.goods[1].price + this.goods[2].price
+                tol() {
+                    let m = 0
+                    this.goods.forEach(item => m += item.price)
+                    return m
+                }
+                //属性名（计算属性名称） 属性值（计算属性处理函数）
+                // 计算属性名1 () {
+                //     // 对依赖的数据进行处理，且进行return
+                //     return 
+                // }，
+                // 计算属性名2 () {
+                //     // 对依赖的数据进行处理，且进行return
+                //     return 
+                // }
+
+
+                // 1. 响应式的特点
+                // 2. 它在视图中使用起来，就像是一个普通的数据项一样
+                // 3. 它本质上是一个函数，在函数内部：
+                //    (1) 通过this.数据项名 来访问data中定义的数据
+                //    (2) 一定要有return
+            }
+        })
+    </script>
+</body>
+
+</html>

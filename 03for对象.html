@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>学习v-for</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>学习v-for - 对象-数值{{num}}</h2>
+        <div>属性值: 是遍历变量，是第一个参数 item</div>
+        <div>属性名: 是循环变量，是第二个参数 index</div>
+        <p v-for='(item,index) in info'>
+            item-属性值:{{item}},index:{{index}}
+        </p>
+        <p v-for='a in goods'>
+            a为数组本身:{{a}}-<br />名:{{a.name}}--价格:{{a.price}}
+        </p>
+        <hr>
+        <!-- <h5 v-for="(item,index) in num">
+        item-值，从1开始: {{item}}, index-下标从0开始:{{index}}我爱你！
+      </h5> -->
+
+        <div v-for="item in 11" id="header" class="red">
+            i miss you!
+        </div>
+
+    </div>
+    <script>
+
+        new Vue({
+            el: '#app',
+            data: {
+                num: 3000,
+                info: {
+                    name: '张三',
+                    msg: '法外狂徒',
+                    source: 'B站'
+                },
+                goods: [
+                    { name: '手机', price: 3000 },
+                    { name: '电脑', price: 5000 }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>

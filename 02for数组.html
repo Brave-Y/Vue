@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>学习v-{{name}}</h2>
+        <p v-for="(good,index) in goods" :key="index">
+            {{index}}--商品名:<b>{{good.name}}</b>-价格:{{good.price}}
+        </p>
+        <hr />
+        <h2 v-for='a in goods'>{{a.name}}:{{a.price}}</h2>
+        <p v-for='a in goods'>商品名:{{a.name}}-价格:{{a.price}}</p>
+        <p>商品名:<b>{{goods[0].name}}</b>-价格:<b>{{goods[0].price}}</b></p>
+        <p>商品名:<b>{{goods[1].name}}</b>-价格:<b>{{goods[1].price}}</b></p>
+    </div>
+    <!-- <script src="./vue.js"></script> -->
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                name: 'vue',
+                info: { city: '武汉', tese: '热干面' },
+                goods: [
+                    { name: '手机', price: 3000 },
+                    { name: '电脑', price: 5000 }
+                ]
+            }
+        })
+    </script>
+
+</body>
+
+</html>

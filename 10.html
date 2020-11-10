@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>12.计算属性.html</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>12.计算属性.html</h2>
+        {{name}}
+        <p v-for="(item,index) in goods">
+            {{item.name}}:{{item.price}}
+        </p>
+
+        <!-- 我们需要一个新的数据项 总价，它的特点是：要依赖于已有数据项计算出来 -->
+        <p>总价：{{totalMoney + '元'}}</p>
+        <p>总价：{{totalMoney + '元'}}</p>
+        <p>总价：{{totalMoney + '元'}}</p>
+
+    </div>
+    <script>
+        // 计算属性
+        // 有缓存的。
+        // 1. 它是一个函数，这个函数的执行时机有两个：（1）页面初次渲染  （2）它依赖的数据变化了（如果它依赖于多个数据项
+        // ，则任意一个变化，它都会被执行）
+
+        // 2. 缓存
+        //    如果一个页面上，多次（假设用了3次）使用了同一个计算属性，当它依赖的数据项变化时，它会被执行，但是，还是只执行一次
+        //    而不是三次。
+        //    原因：第一次执行完成之后，它的值就得到了更新，则第二，三次就直接使用这个结果，而不需要重新去计算
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                name: '张三',
+                goods: [
+                    { name: '电脑', price: 5010 },
+                    { name: '手机', price: 2205 },
+                    { name: '平板', price: 1599 }
+                ]
+            },
+            // 它是一个对象，用来收集所有的计算属性
+            computed: {
+                totalMoney: function () {
+                    console.log('计算属性totalMoney正执行.....', Date.now())
+                    // const m = this.goods[0].price + this.goods[1].price + this.goods[2].price
+                    let m = 0
+                    this.goods.forEach(item => m += item.price)
+                    return this.name + m
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

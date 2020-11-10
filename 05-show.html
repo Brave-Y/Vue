@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>学习v-show和v-if</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>学习v-show和v-if</h2>
+        <!-- v-show的原理：style="display:none"。
+     在审查元素还是可以看见的。 -->
+        <p v-show="isShow1">
+            p1
+        </p>
+        <!-- v-if的原理是：创建，或者是移除元素。
+     在审查元素看不见的。 -->
+
+        <p v-if="isShow1">
+            p2
+        </p>
+        <hr>
+        <p v-show="1">p3</p>
+        <p v-show="-1">p4</p>
+        <p v-show="0">p5:不可见</p>
+        <p v-show="1 > 2">p6</p>
+        <p v-show="1 < 2">p7</p>
+        <p v-show="isShow2">p8</p>
+        <p v-show="!isShow2">p9</p>
+        <p v-show="arr2">p10</p>
+        <p v-show="arr2.length">p11</p>
+        <p v-show="isShow">p12: 这个isShow没有定义，会报错</p>
+        <p v-show="'isShow'">p13</p>
+        <p v-show="''">p14</p>
+    </div>
+    <script>
+        //  1. 相同点和不同点
+        //  2. 它们值一般就是一个布尔值，但是，也可以是任意的
+        // 能转成boolean的表达式
+        new Vue({
+            el: '#app',
+            data: {
+                isShow1: false,
+                isShow2: true,
+                arr1: [1, 2, 3],
+                arr2: []
+            }
+        })
+    </script>
+</body>
+
+</html>
