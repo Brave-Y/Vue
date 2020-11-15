@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <form class="form-inline" style="padding: 20px 0">
+                <input v-model.trim="keyword" type="text" class="form-control" placeholder="输入关键字进行搜索">
+            </form>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>资产名称</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody v-if='list.length'>
+                    <tr v-for='(item,index) in list'>
+                        <td>{{index+1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.price}}</td>
+                        <td><a href="#" @click='bdel(item.id)'>删除</a></td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="4">666</td>
+                    </tr>
+                </tbody>
+
+            </table>
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" v-model.trim="assets.name" class="form-control" placeholder="资产名称">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" v-model.trim.number="assets.price" class="form-control" placeholder="价值">
+                    </div>
+
+                    <button class="btn btn-primary" @click.prevent="badd">添加资产</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0/axios.min.js"></script>
+
+    <script>
+        //const url = 'http://localhost:3000/assets/';
+
+        new Vue({
+            el: '#app',
+            data: {
+                keyword: '',
+                list: [
+                ],
+                assets: {
+                    name: '',
+                    price: '',
+                },
+            },
+            methods: {
+                loadData() {
+                    axios({
+                        method: 'get',
+                        url: 'http://localhost:3000/assets/',
+                    }).then((res) => {
+                        console.log('获取列表成功');
+                        this.list = res.data;
+                        console.log(res.list);
+                    }).catch((err) => {
+                        console.log('获取列表失败');
+                        console.log(err);
+                    })
+                },
+                bdel(index) {
+                    if (confirm(`你确定要删除吗?`)) {
+                        axios({
+                            method: 'delete',
+                            url: 'http://localhost:3000/assets/' + index,
+                        }).then(res => {
+                            alert('删除成功!')
+                            this.loadData();
+                        }).catch(err => {
+                            console.log('删除失败，请与管理员联系')
+                        })
+                    }
+                },
+                badd() {
+                    const { name, price } = this.assets
+                    if (this.assets.name === '' || this.assets.price === '') return
+                    axios({
+                        method: 'POST',
+                        url: 'http://localhost:3000/assets/',
+                        data: {
+                            name,
+                            price,
+                        }
+                    }).then(res => {
+                        alert('添加成功')
+                        this.assets.name = this.assets.price = ''
+                        this.loadData();
+                    }).catch(err => {
+                        console.loadData('添加失败')
+                        console.loadData(err);
+                    })
+                },
+            },
+
+            filters: {},
+            watch: {
+                keyword(newVal, oldVal) {
+                    console.log(Date.now() + 'newVal:' + newVal)
+                    axios({
+                        method: 'get',
+                        url: 'http://localhost:3000/assets/',
+                        params: {
+                            name_like: newVal,
+                        },
+                    }).then(res => {
+                        console.log('查询成功')
+
+                        this.list = res.data;
+                    }).catch(err => {
+                        this.list = [];
+                    })
+                }
+            },
+            created() {
+                this.loadData();
+            },
+
+
+        })
+    </script>
+</body>
+
+</html>

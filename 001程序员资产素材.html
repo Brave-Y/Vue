@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <form class="form-inline" style="padding: 20px 0">
+                搜索：
+                <input v-focus v-model='keyword' type="text" class="form-control" placeholder="输入关键字进行搜索">
+            </form>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>资产名称</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody v-if='keywords.length'>
+                    <tr v-for='(item,index) in keywords'>
+                        <td>{{index}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.price|fCurrency}}</td>
+                        <td><a href="#" v-on:click.prevent='bdel(index)'>删除</a></td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td>数据为空!</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            汇总:{{tol|fCurrency}}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" v-model.trim='asset.name' class="form-control" placeholder="资产名称">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" v-model.trim.number='asset.price' class="form-control" placeholder="价值">
+                    </div>
+
+                    <button class="btn btn-primary" @click.prevent="badd">添加资产</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+
+    <script>
+        Vue.directive('focus', {
+            inserted: (el) => {
+                el.focus();
+            }
+        })
+
+        new Vue({
+            el: '#app',
+            data: {
+                keyword: [],
+                list: [
+                    { id: 1, name: '外套', price: 99 },
+                    { id: 2, name: '裤子', price: 34 },
+                    { id: 3, name: '鞋', price: 25.4 },
+                    { id: 4, name: '头发', price: 19900 }
+                ],
+                asset: {
+                    name: '',
+                    price: '',
+                }
+            },
+            computed: {
+                keywords() {
+                    if (this.keyword === '') return
+                    const rs = this.list.filter(item => {
+                        return item.name.includes(this.keyword)
+                    })
+                    return rs
+                },
+
+                tol() {
+                    let m = 0;
+                    this.keywords.forEach(item => { m += Number(item.price) })
+                    return m
+                }
+            },
+            methods: {
+                bdel(index) {
+                    if (confirm(`你真的要删除${this.list[index].name}吗?`)) {
+                        this.list.splice(index, 1)
+                    }
+                },
+                badd() {
+                    const { name, price } = this.asset;
+                    if (this.asset.name === '' || this.asset.price === '') alert('您输入的值为空!')
+                    this.list.push({
+                        id: this.length + 1,
+                        name: this.asset.name,
+                        price: this.asset.price,
+                    })
+                }
+            },
+            filters: {
+                fCurrency: function (value, _currency) {
+                    // 全局匹配： 三位连续，且之后也是数值 的数值
+                    var digitsRE = /(\d{3})(?=\d)/g;
+                    value = parseFloat(value);
+                    if (!isFinite(value) || !value && value !== 0) return '';
+                    _currency = _currency != null ? _currency : '￥';
+                    // 保留两位小数，并整体转成字符串
+                    var stringified = Math.abs(value).toFixed(2);
+
+                    // 获取整数部分。-3表示倒数3位的位置
+                    var _int = stringified.slice(0, -3);
+
+                    // 整数部分以3为基准长度划分，剩下几位
+                    var i = _int.length % 3;
+                    // 取出头部。
+                    // 如：12345 ----> 12,
+                    var head = i > 0 ? _int.slice(0, i) + (_int.length > 3 ? ',' : '') : '';
+                    // 取出小数点部分
+                    // 如：12345.67 ----> .67
+
+                    var _float = stringified.slice(-3);
+                    var sign = value < 0 ? '-' : '';
+                    return _currency + sign + head + _int.slice(i).replace(digitsRE, '$1,') + _float;
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

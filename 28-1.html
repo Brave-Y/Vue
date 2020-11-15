@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>
+            我的第一个组件
+        </h2>
+        <mydiv></mydiv>
+
+    </div>
+    <script>
+        Vue.component('Mydiv', {
+            data: function () {
+                return {
+                    num: 1
+                }
+            },
+            template: `
+            <div>
+                <p>第一个组件:<button v-on:click='onadd'>把自己的数据加1</button></p>{{num}}
+                </div>
+            `,
+            methods: {
+                onadd() {
+                    this.num += 1;
+                }
+            }
+        })
+        new Vue({
+            el: '#app',
+            data: {
+
+            }
+        })
+    </script>
+</body>
+
+
+</html>

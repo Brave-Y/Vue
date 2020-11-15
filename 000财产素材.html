@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>资产名称</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>宝马</td>
+                        <td>20000</td>
+                        <td><a href="#">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+
+    <script>
+
+        new Vue({
+            el: '#app',
+            data: {
+                list: [
+                    { id: 1, name: '外套', price: 99 },
+                    { id: 2, name: '裤子', price: 34 },
+                    { id: 3, name: '鞋', price: 25.4 },
+                    { id: 4, name: '头发', price: 19900 }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>

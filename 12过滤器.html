@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>过滤器</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+
+        .no-pay {
+            color: red;
+        }
+
+        .no-send {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        {{timeStamp}}
+        <h2>过滤器- {{price | fPrice(0) }}</h2>
+        <p v-for="(order,index) in orders">
+            序号:{{index+1}},
+            {{order.name}},
+            价格:{{order.price | fPrice}},
+            订单日期:{{ order.timeStamp | fFormatDate}},
+            <!-- 状态:<label class="no-pay">{{order.status | fStatus}} </label> -->
+            状态:<label :class="order.status | fStatus | fCss">{{order.status | fStatus}} </label>
+        </p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                timeStamp: 1605339511261,
+                price: 167.891,
+                // 1表示 待付款，  2 表示 待发货 ， 3表示 待收货
+                orders: [
+                    {
+                        name: '裤子', price: 271.195, timeStamp: 1605339511261, status: 1,
+                    },
+                    {
+                        name: '电脑', price: 6699.398, timeStamp: 1605339511261, status: 2,
+                    },
+                    {
+                        name: '方便面', price: 15.507, timeStamp: 1605339511261, status: 3
+                    }]
+            },
+            filters: {
+                // 过滤器的定义
+                // 属性名称（过滤器名称）：属性的值（过滤器处理函数）
+                // myFilter: function(value,其它参数) {
+
+                // }
+                fprice(val, dig = 1) {
+                    return Number(val), toFixed(dig)
+                },
+                fFormatDate(val) {
+                    console.log('val', val)
+                    // val 就是需要被过滤器处理的值
+                    // return '你被过滤了' + val
+                    const dt = new Date(val)
+                    return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate()
+                    // const dt = new Date(val)
+                    // return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate()
+                },
+                fStatus(status) {
+                    if (status === 1) {
+                        return '待付款'
+                    } else if (status === 2) {
+                        return '待发货'
+                    } else if (status === 3) {
+                        return '待收货'
+                    } else {
+                        return '未知'
+                    }
+                },
+                fCss(status) {
+                    if (status === '待付款') {
+                        return 'no-pay'
+                    } else if (status === '待发货') {
+                        return 'no-send'
+                    } else if (status === '待收货') {
+                        return 'no-rece'
+                    }
+                }
+            },
+            computed: {
+                formatedDate() {
+                    // this.date1  ------> 2020-10-10
+                    const dt = new Date(this.date1)
+                    return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate()
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

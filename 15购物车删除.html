@@ -116,30 +116,32 @@
 </head>
 
 <body>
+    <!-- v-for -->
     <div id="app">
-        <h3>我的购物车</h3>
-        <div v-if='bookList.length'>
-            <h4>一共{{bookList.length}}件商品,您一共消费{{tol}}元</h4>
+        <h3 title="张三的购物车">我的购物车</h3>
+        <!-- <div v-if="bookList.length > 0"> -->
+        <div v-if="bookList.length">
+            <h4>一共{{bookList.length}}件商品，共{{totalMoney}}元</h4>
             <div class="list">
-                <div class="book" :title="book.name" v-for='(book,index) in bookList'>
+                <div v-for="(book,index) in bookList" class="book" :title="book.name">
                     <a href="">
                         <div class="figure">
-                            <img :src='book.picSrc' :alt="book.name">
+                            <img v-bind:src="book.picSrc" :alt="book.name">
                         </div>
                         <h4 class="title" :title="book.name">{{book.name}}</h4>
                         <p class="desc"></p>
                         <p class="price"><span class="num">{{book.price}}</span></p>
                     </a>
-                    <button class='btn' title="移出购物车">-</button>
+                    <button class='btn' title="移出购物车" v-on:click="hDelete(index)">-</button>
                 </div>
             </div>
         </div>
-        <p v-else>您的购物车空空,您不去<a href="#">这里</a>看看吗</p>
+        <p v-else>您的购物车空空如也，你不去<a href="">这里</a>看看吗？</p>
     </div>
-    <script src="./vue.js"></script>
-    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script> -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+
     <script>
-        const vue = new Vue({
+        const vm = new Vue({
             el: '#app',
             data: {
                 bookList: [
@@ -171,16 +173,29 @@
                 ]
             },
             computed: {
-                tol: function () {
-                    let m = 0
-                    this.bookList.forEach(item => m += item.price)
-                    return m
+                totalMoney: function () {
+                    // 从bookList中循环，计算所有的总价
+                    let m = 0;
+                    this.bookList.forEach(item => {
+                        item => { m += item.price }
+                        return m
+                    });
+                }
+            },
+            methods: {
+                hDelete(idx) {
+                    // idx: 要删除的图书的下标
+                    this.bookList.splice(idx, 1)
+
                 }
             }
         })
 
-    </script>
+        console.log(vm.bookList)
+    // 在控制台中 输入vm.bookList = [] ，验证v-if,v-else的效果
 
+    // vm.xxxx = '新值'
+    </script>
 </body>
 
 </html>

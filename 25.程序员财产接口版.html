@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- 搜索 -->
+            <form class="form-inline" style="padding: 20px 0">
+                <!-- @input="hKeywordChange" -->
+                搜索：
+                <input v-model.trim="keyword" type="text" class="form-control" placeholder="输入关键字进行搜索">
+            </form>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>资产名称</th>
+                        <th>价值</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in list">
+                        <td>{{index+1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.price}}</td>
+                        <!-- 做删除，传入id -->
+                        <td><a href="#" v-on:click.prevent="hDel(item.id)">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 添加资产 -->
+            <form class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" v-model.trim="asset.name" class="form-control" placeholder="资产名称">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" v-model.trim.number="asset.price" class="form-control" placeholder="价值">
+                    </div>
+
+                    <button class="btn btn-primary" @click.prevent="hAdd">添加资产</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <!-- 引入axios -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0/axios.min.js"></script>
+
+
+    <script>
+
+        // 0. 数据要从接口处获取
+        // 1. v-if, v-else. 是否显示表格内容，或者是提示。 
+        // 2. v-for. 循环列表
+        // 3. {{ }} 显示数据
+        // 4. @click.prevent
+        // 5. 计算属性算总价
+        // 6. 过滤器，处理货币金额
+        // 7. 列表数据筛选
+        //    通过设计计算属性，让它来决定表格区域的数据。
+        // 8. 自定义指令
+
+
+        // 程序优化： 消除魔术字符串
+        const BASE_URL = 'http://localhost:3000/assets/'
+
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                keyword: '', // 搜索关键字
+                asset: {
+                    name: '',
+                    price: ''
+                },
+                list: []
+            },
+            computed: {},
+            methods: {
+                loadData() {
+                    axios({
+                        method: 'get',
+                        // url: 'http://localhost:3001/assets/',
+                        url: BASE_URL
+                    }).then(res => {
+                        console.log('成功')
+                        // console.log(res.data);
+                        // 将请求回来的数据保存到list中
+                        this.list = res.data
+                        console.log(this.list)
+                    }).catch(err => {
+                        console.log('失败')
+                        console.log(err)
+                    })
+                },
+                hDel(id) {
+                    if (confirm('你确认要删除吗？')) {
+                        axios({
+                            method: 'DELETE',
+                            url: BASE_URL + id
+                        }).then(res => {
+                            // alert('删除成功')
+                            // 重新获取数据，以更新页面
+                            this.loadData()
+                        }).catch(err => {
+                            alert('删除失败，请与管理员联系')
+                        })
+                    }
+                    // alert('删除')
+                },
+                hAdd() {
+                    const { name, price } = this.asset
+                    // 1. 判断数据是否为空
+                    if (name === '' || price === '') {
+                        return
+                    }
+                    // 2. 发ajax
+                    axios({
+                        method: 'POST',
+                        url: BASE_URL,
+                        data: {
+                            name,
+                            price
+                        }
+                    }).then(res => {
+                        // 3. 根据ajax执行结果，给出后续动作
+                        console.log('ok')
+                        // (1) 清空表单区域的内容
+                        this.asset.name = this.asset.price = ''
+                        // (2) 重发请求
+                        this.loadData()
+                    }).catch(err => {
+                        console.log('error')
+                    })
+                },
+                // hKeywordChange () {
+                //   console.log(Date.now(), 'input事件，....')
+                // }
+            },
+            filters: {},
+            watch: {
+                keyword(newVal, oldVal) {
+                    console.log(Date.now(), 'keyword变化了........', newVal)
+                    // 去发出ajax请求，获取新数据
+                    axios({
+                        method: 'GET',
+                        url: BASE_URL,
+                        params: {
+                            name_like: newVal
+                        }
+                    }).then(res => {
+                        this.list = res.data
+                    }).catch(err => {
+                        this.list = []
+                    })
+                }
+            },
+            // 当vue实例被创建时，会自动去执行created函数--钩子函数(这个函数钩在vue上，当vue创建时，这个函数会自动执行)
+            //  1. 可以在这里里面去发ajax
+            //  2. 可以在这个函数中去通过this来访问数据项
+            created() {
+                // alert(1)
+                this.loadData()
+            }
+        })
+    </script>
+</body>
+
+</html>

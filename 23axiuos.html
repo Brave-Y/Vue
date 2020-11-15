@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0/axios.min.js"></script>
+    <script>
+
+        // console.log(axios)
+        // // 格式：
+        // axios({
+        //     // 请求方式 get|post|put|patch|delete  大小写不区分
+        //     method: 'GET',
+        //     // 路径上传参在url后进行拼接
+        //     url: 'http://localhost:3000/assets/1',
+        //     // ?后键值对传参
+        //     params: {},
+        //     // 请求体传参
+        //     data: {},
+        //     // 请求头传参
+        //     headers: {}
+        // }).then(res => {
+        //     console.log('成功')
+        //     console.log(res)
+        // }).catch(err => {
+        //     console.log('失败')
+        //     console.log(err)
+        // })
+
+        // 1. 测试添加新资产
+        // axios({
+        //     method: 'POST',
+        //     url: 'http://localhost:3000/assets',
+        //     data: {
+        //         name: '测试axios',
+        //         price: 1
+        //     }
+        // }).then(res => {
+        //     console.log('成功')
+        //     console.log(res.data);
+        // }).catch(err => {
+        //     console.log('失败')
+        //     console.log(err)
+        // })
+
+        // 2. 测试获取所有的资产
+        // axios({
+        //     method: 'get',
+        //     url: 'http://localhost:3000/assets'
+        // }).then(res => {
+        //     console.log('成功')
+        //     console.log(res.data);
+        // }).catch(err => {
+        //     console.log('失败')
+        //     console.log(err)
+        // })
+
+        // 3. 测试 根据关键字查询
+        // axios({
+        //   method: 'get',
+        //   url: 'http://localhost:3000/assets?name_like=测'
+        // }).then(res => {
+        //   console.log('成功')
+        //   console.log(res.data);
+        // }).catch(err => {
+        //   console.log('失败')
+        //   console.log(err)
+        // })
+        // axios({
+        //     method: 'get',
+        //     url: 'http://localhost:3000/assets',
+        //     params: {
+        //         name_like: '测',
+        //     }
+        // }).then(res => {
+        //     console.log('成功')
+        //     console.log(res.data)
+        // }).catch(err => {
+        //     console.log('失败')
+        //     console.log(err)
+        // }
+        // )
+
+        // 3. 测试 根据关键字查询
+        // axios({
+        //     method: 'get',
+        //     url: 'http://localhost:3000/assets',
+        //     params: {
+        //         name_like: '测'
+        //     }
+        // }).then(res => {
+        //     console.log('成功')
+        //     console.log(res.data);
+        // }).catch(err => {
+        //     console.log('失败')
+        //     console.log(err)
+        // })
+
+        // 4. 测试 删除
+        // let id = 5
+        // axios({
+        //     method: 'DELETE',
+        //     url: 'http://localhost:3000/assets/' + id
+        // }).then(res => {
+        //     console.log('删除成功')
+        //     console.log(res.data);
+        // }).catch(err => {
+        //     console.log('失败')
+        //     console.log(err)
+        // })
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>29.学习watch.html</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>29.学习watch.html</h2>
+        <p>
+            msg:<input v-model="msg" /> {{cMsg}}
+        </p>
+        <p>
+            name:<input v-model="person.name" />
+        </p>
+
+
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                msg: "1",
+                person: {
+                    name: '张三',
+                    info: {
+                        a: 1
+                    }
+                }
+            },
+            computed: {
+                cMsg() {
+                    console.log('computed..msg')
+                    return 'computed' + this.msg
+                }
+            },
+            // 侦听器
+            // 作用是：监视数据的变化，当被监听的数据变化时，它就会自动执行。
+            // 格式：
+            //    属性名: 就是你要监听的数据项
+            //    属性值：一个函数，当这要监听的数据项变化时，要执行的函数, 它会自动传入新值和旧值
+            //           正常使用this
+            // 属性名1: function(新值，旧值) {
+            // 	// 你要做什么.....
+            // },
+            // 属性名2: function(新值，旧值) {
+            // 	// 你要做什么.....
+            // }
+            // watch: {
+            //   msg: function(newVal, oldVal) {
+            //     console.log(Date.now(), 'msg变化了,旧值是',oldVal, '新值是',newVal)
+            //   },
+            //   "person.name" : function(newVal, oldVal) {
+            //     // this.msg = "10000"
+            //     console.log(Date.now(), 'person.name 变化了,旧值是',oldVal, '新值是',newVal)
+            //   },
+            //   "person.info.a" : function(newVal, oldVal) {
+            //     console.log(Date.now(), 'person.info.a 变化了,旧值是',oldVal, '新值是',newVal)
+            //   }
+            // }
+            watch: {
+                msg: function (newVal, oldVal) {
+                    console.log(Date.now() + 'msg值变化了,旧值是:' + oldVal + '新值是：' + newVal)
+                },
+                "person.name": (newVal, oldVal) => {
+                    console.log(Date.now() + 'msg值变化了,旧值是:' + oldVal + '新值是：' + newVal)
+                },
+                "person.info.a": (newVal, oldVal) => {
+                    console.log(Date.now() + 'msg值变化了,旧值是:' + oldVal + '新值是：' + newVal)
+
+                }
+            }
+            // 请问，你如何理解计算属性与监听器的区别？
+            // 相同点： 
+            //   1. 如果依赖的数据项（监听的数据项）变化了，它们都会执行。
+            //   2. 本质都是函数
+            // 不同点：
+            //   1. 计算属性一定要有返回值。计算属性的作用就是用来根据现有的数据项产生新的数据，所以函数一定要有return
+            //   2. 监听器不一定要有返回值，你可以在函数体内做任意的操作。
+        })
+    </script>
+</body>
+
+</html>
