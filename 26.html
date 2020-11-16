@@ -33,7 +33,7 @@
                 </tbody>
                 <tbody v-else>
                     <tr>
-                        <td colspan="4">666</td>
+                        <td colspan="4">列表信息为空</td>
                     </tr>
                 </tbody>
 
@@ -58,88 +58,86 @@
 
     <script>
         //const url = 'http://localhost:3000/assets/';
+        //const url = 'http:localhost:3000/assets/'
 
         new Vue({
             el: '#app',
             data: {
-                keyword: '',
-                list: [
-                ],
+                list: [],
+                keyword: [],
                 assets: {
                     name: '',
                     price: '',
-                },
+                }
             },
+            computed: {},
             methods: {
-                loadData() {
+                loaddata() {
                     axios({
                         method: 'get',
                         url: 'http://localhost:3000/assets/',
-                    }).then((res) => {
-                        console.log('获取列表成功');
-                        this.list = res.data;
-                        console.log(res.list);
-                    }).catch((err) => {
-                        console.log('获取列表失败');
+                    }).then(res => {
+                        console.log('获取列表信息成功')
+                        this.list = res.data
+                    }).catch(err => {
+                        console.log('获取列表信息失败')
                         console.log(err);
                     })
                 },
                 bdel(index) {
-                    if (confirm(`你确定要删除吗?`)) {
+                    if (confirm('你确定要删除吗')) {
                         axios({
                             method: 'delete',
-                            url: 'http://localhost:3000/assets/' + index,
+                            url: 'http://localhost:3000/assets/' + index
                         }).then(res => {
-                            alert('删除成功!')
-                            this.loadData();
+                            console.log('删除成功');
+                            this.loaddata();
                         }).catch(err => {
-                            console.log('删除失败，请与管理员联系')
+                            console.log('删除失败');
+                            console.log(err);
                         })
                     }
                 },
                 badd() {
-                    const { name, price } = this.assets
-                    if (this.assets.name === '' || this.assets.price === '') return
+                    const { name, price } = this.assets;
+                    if (this.assets.name === '' || this.assets.price === '') return;
                     axios({
-                        method: 'POST',
+                        method: 'post',
                         url: 'http://localhost:3000/assets/',
                         data: {
                             name,
                             price,
-                        }
+                        },
                     }).then(res => {
-                        alert('添加成功')
-                        this.assets.name = this.assets.price = ''
-                        this.loadData();
+                        console.log('添加成功')
+                        this.assets.name === this.assets.price === '';
+                        this.loaddata();
                     }).catch(err => {
-                        console.loadData('添加失败')
-                        console.loadData(err);
+                        console.log('添加失败');
+                        console.log(err)
                     })
-                },
+                }
             },
-
-            filters: {},
             watch: {
                 keyword(newVal, oldVal) {
-                    console.log(Date.now() + 'newVal:' + newVal)
+                    console.log('keyword变化了' + newVal)
                     axios({
                         method: 'get',
                         url: 'http://localhost:3000/assets/',
                         params: {
                             name_like: newVal,
-                        },
+                        }
                     }).then(res => {
-                        console.log('查询成功')
-
-                        this.list = res.data;
+                        this.list = res.data
                     }).catch(err => {
-                        this.list = [];
+                        this.list = []
                     })
                 }
             },
             created() {
-                this.loadData();
+                this.loaddata();
             },
+
 
 
         })

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>html页面</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+  <style>
+    body {
+      background-color: #eee;
+    }
+
+    #app {
+      background-color: #fff;
+      width: 500px;
+      margin: 50px auto;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+      padding: 2em;
+    }
+
+    .box {
+      padding: 1em;
+      border: 1px solid #ccc;
+      margin: 1em;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 1. 实现静态效果 -->
+  <!-- 2. 向子组件中传值
+          - zh: 中文
+          - en: 英文，这就是答案
+   -->
+  <!-- 3. 子组件要抛出事件，来修改父组件中的数据值 -->
+  <div id="app">
+    <h2>html页面</h2>
+    <div v-for="(item,idx) in list">
+      序号:{{idx+1}}
+      <my-com @a-b-c="hUpdateAns" :idx="idx" :zh="item.zh" :en="item.en"></my-com>
+      <!-- <div id="a" class="c" @click="xxx"></div> -->
+      结果：{{item.isRight ? "正确": "错误"}}
+      <hr>
+    </div>
+  </div>
+  <script>
+    Vue.component('MyCom', {
+      props: ['zh', 'en', 'idx'],
+      data() {
+        return {
+          yourAns: ''
+        }
+      },
+      template: `
+          <div>
+            <b>{{zh}}</b> <input v-model.trim="yourAns" placeholder="请输入单词"/>
+          </div>
+        `,
+      watch: {
+        yourAns(newVal, oldVal) {
+          console.log(newVal)
+          if (newVal === this.en) {
+            console.log('回答正确')
+          } else {
+            console.log('回答错误')
+          }
+          this.$emit('a-b-c', {
+            idx: this.idx, //  下标
+            result: newVal === this.en // 当前的答案
+          })
+        }
+      }
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        list: [
+          {
+            zh: '指令', // 中文
+            en: 'directive', // 英文
+            isRight: false // 作答是否正确
+          },
+          {
+            zh: '组件',
+            en: 'component',
+            isRight: false
+          },
+          {
+            zh: '插槽',
+            en: 'slot',
+            isRight: false
+          }
+        ]
+      },
+      methods: {
+        hUpdateAns(obj) {
+          console.log('父组件收到了子组件抛出的事件.......', obj)
+          // obj中子组件中传过来的数据，它有：下标，结果
+          this.list[obj.idx].isRight = obj.result
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

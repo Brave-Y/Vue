@@ -28,36 +28,43 @@
 </head>
 
 <body>
-    <div id="app">
-        <h2>html页面</h2>
-        <div>{{info}}</div>
-        <my-son :abcd="info" e="123" d="567" :j="abc"></my-son>
+    <div id='app'>
+        <h2>父子组件</h2>
+        <mydiv :info='info' :abc='abc' data='父子数据'></mydiv>
     </div>
     <script>
-        Vue.component('MySon', {
-            // 在子组件的内部定义props
-            // 格式是： ['你打算从父组件中接收的属性名1', .....]
-            //        这里的属性名要去父组件中传入的自定义属性名要保持一致
-
-            // 如果父组件中传入自定义属性，但是子组件没有定义props去接收，还是无法访问。
-            props: ['abcd', 'e', 'd', 'j'],
+        Vue.component('mydiv', {
+            data: function () {
+                return { num: 'num传值' };
+            },
+            props: ['info', 'abc', 'data'],
             template: `
-        <div>
-          我是子组件：获取父组件中的数据{{abcd}} - 
-          <p>e: {{e}}</p>
-          <p>d: {{d}}</p>
-          <p>j: {{j}}</p>
-        </div>
-       `
+            <div>
+            <p>父子组件{{num}}</p>
+            <p>{{info}}</p>
+            <p>{{abc}}</p>
+            <p>{{data}}</p>
+            </div>
+            `
         })
-        var vm = new Vue({
+
+
+
+
+
+
+        new Vue({
             el: '#app',
             data: {
-                abc: '100',
-                info: '一辆车'
+                info: 'info数据',
+                abc: 'abc数据'
             }
         })
+
+
+
     </script>
+
 </body>
 
 </html>

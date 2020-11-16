@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>html页面</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>子传父</h2>
+        {{num}}
+        <button @click='fu'>父组件点击事件</button>
+        <mydiv @zi1='zi1dian' @zi2='zi2chuan'></mydiv>
+
+    </div>
+
+
+    <script>
+        Vue.component('mydiv', {
+            methods: {
+                zi1dian() {
+                    this.$emit('zi1')
+                },
+                zi2chuan() {
+                    this.$emit('zi2', { num: 1 })
+                }
+            },
+            template: `
+    <div>
+     这里是子组件<br>
+     子组件1弹窗<button @click = 'zi1dian'>点击事件</button><br/>
+     子组件2传值<button @click = 'zi2chuan'>传值</button>     
+
+    </div>
+    `
+        })
+
+
+        new Vue({
+            el: '#app',
+            data: {
+                num: 100
+            },
+            methods: {
+                fu() {
+                    alert("父点击事件")
+                },
+                zi1dian() {
+                    alert('子1点击事件')
+                },
+                zi2chuan(obj) {
+                    this.num = obj.num
+                    alert('num传值')
+                }
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>

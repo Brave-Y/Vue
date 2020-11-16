@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>案例-折叠面板</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .title span {
+            cursor: pointer;
+        }
+
+        .content {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>折叠面板</h2>
+        <mydiv v-for='item in list' :title='item.title' :author='item.author' :content='item.content'>
+        </mydiv>
+
+
+    </div>
+
+    <script>
+        Vue.component('mydiv', {
+            data: function () {
+                return { isShow: false, };
+            },
+            props: ['title', 'author', 'content'],
+            template: `
+            <div>
+            <div class="title">
+            <label>{{title}}--{{author}}</label>
+            <span v-on:click = 'isShow=!isShow'>{{isShow?'收起':'展开'}}</span>
+            </div>
+            <div class='content' v-show = 'isShow'>
+            {{content}}</div>
+            <hr>
+            
+            </div>
+            `
+        })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                list: [
+                    {
+                        id: 1,
+                        title: '洛阳陌',
+                        author: '李白',
+                        content: '白玉谁家郎,回车渡天津。看花东陌上，惊动洛阳人。'
+                    },
+                    {
+                        id: 2,
+                        title: '静夜思',
+                        author: '李白',
+                        content: '床前明月光,疑是地上霜,举头望明月,低头思故乡。'
+                    },
+                    {
+                        id: 3,
+                        title: '赠汪伦',
+                        author: '李白',
+                        content: '李白乘舟将欲行，忽闻岸上踏歌声。花潭水深千尺，不及汪伦送我情。'
+                    }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>

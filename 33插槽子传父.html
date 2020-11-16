@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>html页面</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>html页面</h2>
+        {{num}}
+        <button @click="hC1">父组件上的按钮</button>
+        <!-- <my-com tit="ad" a="1"></my-com> -->
+
+        <my-com1 @event1="hCom1" @event2="hEvent2"></my-com1>
+    </div>
+    <script>
+        Vue.component('MyCom1', {
+            methods: {
+                hClickBtn1() {
+                    console.log('1')
+                    // 告诉父组件这个click事件发生了。
+                    // $emit: 是vue的一个方法。它用来抛出事件
+                    this.$emit('event1')
+                },
+                hClickBtn2() {
+                    this.$emit('event2', { num: 1 })
+                }
+            },
+            template: `
+        <div style="border:3px solid #ccc; padding:20px;margin:20px;">
+          这里是子组件
+          <br/> 给父组件发消息 <button @click="hClickBtn1">发消息event1</button>
+          <br/> 给父组件发消息 <button @click="hClickBtn2">发消息event2,传值给父组件</button>
+        </div>
+       `
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                num: 100
+            },
+            methods: {
+                hCom1() {
+                    alert('父组件上Com1')
+
+                },
+                hEvent2(obj) {
+                    console.log('event2', obj)
+                    this.num = obj.num
+                },
+                hC1() {
+                    alert('父组件上的按钮')
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

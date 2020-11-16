@@ -24,9 +24,9 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody v-if='keywords.length'>
-                    <tr v-for='(item,index) in keywords'>
-                        <td>{{index}}</td>
+                <tbody v-if='guolv.length'>
+                    <tr v-for='(item,index) in guolv'>
+                        <td>{{index+1}}</td>
                         <td>{{item.name}}</td>
                         <td>{{item.price|fCurrency}}</td>
                         <td><a href="#" v-on:click.prevent='bdel(index)'>删除</a></td>
@@ -48,10 +48,10 @@
             <form class="form-inline">
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" v-model.trim='asset.name' class="form-control" placeholder="资产名称">
+                        <input type="text" v-model.trim='assets.name' class="form-control" placeholder="资产名称">
                     </div>
                     <div class="input-group">
-                        <input type="text" v-model.trim.number='asset.price' class="form-control" placeholder="价值">
+                        <input type="text" v-model.trim.number='assets.price' class="form-control" placeholder="价值">
                     </div>
 
                     <button class="btn btn-primary" @click.prevent="badd">添加资产</button>
@@ -64,56 +64,53 @@
 
     <script>
         Vue.directive('focus', {
-            inserted: (el) => {
+            inserted: function (el) {
                 el.focus();
             }
         })
-
         new Vue({
             el: '#app',
             data: {
                 keyword: [],
+                assets: {
+                    name: '',
+                    price: '',
+                },
                 list: [
                     { id: 1, name: '外套', price: 99 },
                     { id: 2, name: '裤子', price: 34 },
                     { id: 3, name: '鞋', price: 25.4 },
                     { id: 4, name: '头发', price: 19900 }
                 ],
-                asset: {
-                    name: '',
-                    price: '',
-                }
             },
             computed: {
-                keywords() {
-                    if (this.keyword === '') return
+                guolv() {
+                    if (this.keyword === '') return this.list;
                     const rs = this.list.filter(item => {
                         return item.name.includes(this.keyword)
                     })
                     return rs
                 },
-
                 tol() {
                     let m = 0;
-                    this.keywords.forEach(item => { m += Number(item.price) })
-                    return m
+                    this.guolv.forEach(item => m += item.price)
+                    return m;
                 }
             },
             methods: {
                 bdel(index) {
-                    if (confirm(`你真的要删除${this.list[index].name}吗?`)) {
-                        this.list.splice(index, 1)
-                    }
+                    confirm(`你确定要删除${this.list[index].name} 吗 ?`)
+                    this.list.splice(index, 1)
                 },
                 badd() {
-                    const { name, price } = this.asset;
-                    if (this.asset.name === '' || this.asset.price === '') alert('您输入的值为空!')
+                    const { name, price } = this.assets;
+                    if (this.name === '' || this.price === '') return
                     this.list.push({
-                        id: this.length + 1,
-                        name: this.asset.name,
-                        price: this.asset.price,
+                        id: this.assets.length + 1,
+                        name: this.assets.name,
+                        price: this.assets.price,
                     })
-                }
+                },
             },
             filters: {
                 fCurrency: function (value, _currency) {
@@ -141,6 +138,7 @@
                     return _currency + sign + head + _int.slice(i).replace(digitsRE, '$1,') + _float;
                 }
             },
+
         })
     </script>
 </body>
