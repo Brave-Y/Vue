@@ -30,33 +30,27 @@
 <body>
     <div id='app'>
         <h2>子传父</h2>
-        {{num}}
-        <button @click='fu'>父组件点击事件</button>
-        <mydiv @zi1='zi1dian' @zi2='zi2chuan'></mydiv>
-
+        {{num}}<button @click='fudian'>父组件点击事件</button>
+        <mydiv @click='zi1dian' @chuan='zichuan2'></mydiv>
     </div>
-
-
     <script>
         Vue.component('mydiv', {
             methods: {
                 zi1dian() {
-                    this.$emit('zi1')
+                    this.$emit('click')
                 },
-                zi2chuan() {
-                    this.$emit('zi2', { num: 1 })
+                zi2chuan(obj) {
+                    this.$emit('chuan', { num: 1 })
                 }
             },
             template: `
     <div>
-     这里是子组件<br>
-     子组件1弹窗<button @click = 'zi1dian'>点击事件</button><br/>
-     子组件2传值<button @click = 'zi2chuan'>传值</button>     
+    子组件1号：<button @click='zi1dian'>子组件点击弹窗</button><br/>
+    子组件2号：<button @click='zi2chuan'>子组件2传数据</button><br/>
 
     </div>
     `
         })
-
 
         new Vue({
             el: '#app',
@@ -64,18 +58,19 @@
                 num: 100
             },
             methods: {
-                fu() {
-                    alert("父点击事件")
+                fudian() {
+                    alert("父元素点击事件")
                 },
                 zi1dian() {
-                    alert('子1点击事件')
+                    alert('子组件弹窗1')
                 },
-                zi2chuan(obj) {
-                    this.num = obj.num
-                    alert('num传值')
+                zichuan2(obj) {
+                    this.num = obj.num;
                 }
+
             }
         })
+
 
 
     </script>

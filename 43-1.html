@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>html页面</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue-router/3.1.3/vue-router.min.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>页面</h2>
+        <div>
+            <router-link to='/'>我的主页</router-link>
+            <router-link to='/news'>新闻</router-link>
+            <router-link to='/sport'>运动</router-link>
+        </div>
+        <hr>
+        <router-view></router-view>
+    </div>
+    <script>
+        const abc = new VueRouter({
+            routes: [
+                {
+                    path: '/',
+                    component: {
+                        template: `
+                <div> 主页
+                    跳入新闻列表页有两种方式：<br>
+                    1. router-link
+                    <br>
+                    <router-link to="/news">新闻列表</router-link>
+                    <br>
+                    2. router-link
+                    <br>
+                    <router-link to="/news?a=1&b=2">跳到新闻列表并传入a=1&b=2</router-link>
+                    <br>
+                    3. 通过代码 $router.push(地址)
+                    <button @click="hJump">去到新闻列表</button>
+                    <br>
+                    4. 动态路由传参
+                    <router-link to="/sport/100">跳到运动页面并传入100</router-link>
+                    </br>
+                    <button @click="hJumpToSport100">跳到运动页面并传入100</button></div>
+                `,
+                        methods: {
+                            hJumpToSport100() {
+                                // alert(1)
+                                this.$router.push('/sport/100')
+                            },
+                            hJump() {
+                                // alert(1)
+                                this.$router.push('/news')
+                            }
+                        }
+                    }
+                },
+                {
+                    path: '/news',
+                    component: {
+                        template: `
+                <div>新闻列表</br>
+                接收通过查询地址符串的地址传入的参数 </br>
+                格式：$route.query.参数名
+                <hr>
+                从查询字符串中获取的参数a是：{{$route.query.a}}</br>
+                从查询字符串中获取的参数b是：{{$route.query.b}}</div>
+                `,
+                        methods: {
+
+                        }
+                    }
+                },
+                {
+                    path: '/sport/:id',
+                    component: {
+                        template: `
+                <div>运动--{{$route.params.id}}</div>
+                `,
+                        methods: {
+
+                        }
+                    }
+                },
+            ]
+        })
+
+        new Vue({
+            el: '#app',
+            router: abc,
+            data: {},
+        })
+    </script>
+
+
+
+
+</body>
+
+</html>

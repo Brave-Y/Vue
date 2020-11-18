@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>html页面</title>
+ <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+ <style>
+   body{
+     background-color: #eee;
+   }
+   #app{
+     background-color:#fff;
+     width: 500px;
+     margin: 50px auto;
+     box-shadow: 3px 3px 3px rgba(0 , 0, 0, 0.5);padding:2em;
+    }
+   .box{
+     padding: 1em;
+     border:1px solid #ccc;
+     margin:1em;
+   }
+   </style>
+ </head>
+ <body>
+   <div id="app">
+     <h2>html页面</h2>
+      当有一个名为e-a-b-c-1的事件从子组件中抛出来时，要在父组件中调用hEvent1
+     <my-com1 @e-a-b-c-1="hEvent1"></my-com1>
+   </div>
+   <script>
+     Vue.component('MyCom1', {
+       template: `
+        <div>
+          <button @click="$emit('e-a-b-c-1', {a:1}) ">向父组件传数据</button>
+        </div>
+        `,
+        // created () {
+        //   setTimeout( () => {
+        //     this.$emit('e-a-b-c-1')
+        //   }, 3000)
+        // }
+     })
+
+      var vm = new Vue({
+        el: '#app',
+        data: {
+
+        },
+        methods: {
+          hEvent1 (obj) {
+            alert(obj)
+            console.log(obj)
+          }
+        }
+      })
+   </script>
+ </body>
+</html>

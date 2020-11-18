@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>html页面</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+    <style>
+        body {
+            background-color: #eee;
+        }
+
+        #app {
+            background-color: #fff;
+            width: 500px;
+            margin: 50px auto;
+            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+            padding: 2em;
+        }
+
+        .box {
+            padding: 1em;
+            border: 1px solid #ccc;
+            margin: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>单词验证</h2>
+        <div v-for='(item,index) in list'>
+            序号:{{index}};<br>
+            <mydiv :zh='item.zh' :en='item.en' @pao='jie' :index='index'></mydiv>
+            {{item.isRight? '正确':'错误'}}
+            <hr>
+        </div>
+    </div>
+    <script>
+        Vue.component('mydiv', {
+            watch: {
+                shuju(newVal, oldVal) {
+                    if (newVal === this.en) {
+                        console.log('输入正确')
+                    } else {
+                        console.log('答案错误')
+                    }
+                    this.$emit('pao', {
+                        result: newVal === this.en,
+                        index: this.index,
+                    })
+                },
+            },
+            data() {
+                return {
+                    shuju: '',
+                }
+            },
+            props: ['zh', 'en', 'index'],
+            template: `
+    <div>
+ {{zh}}:<input type='text' v-model='shuju' placeholder="请输入密码">{{en}}
+    </div>
+    `
+        })
+        new Vue({
+            el: '#app',
+            data: {
+                list: [
+                    {
+                        zh: '指令',
+                        en: 'directive',
+                        isRight: false,
+                    },
+                    {
+                        zh: '组件',
+                        en: 'component',
+                        isRight: false,
+                    },
+                    {
+                        zh: '插槽',
+                        en: '插槽',
+                        isRight: false,
+                    },
+                ]
+            },
+            methods: {
+                jie(obj) {
+                    console.log(obj)
+                    this.list[obj.index].isRight = obj.result
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <!-- 
+    #：
+    1. 锚点链接
+    2. 它在地址栏中有一个专门的名字： hash值
+
+    特点是：
+       （1）当地址栏中的hash变化时，会触发一个hashchange的事件；
+       （2）它并不会导致浏览器重发请求
+  
+  -->
+  <div>
+    <a href="#/index">我的主页</a>
+    <a href="#/myfrend">朋友</a>
+    <a href="#/music">音乐</a>
+  </div>
+  <div id="content">
+    根据hash值不同，显示不同的内容
+  </div>
+
+  <script>
+
+    function hashChange() {
+      // location.hash： 自动获取地址栏中的hash值
+      if (location.hash === '#/index') {
+        document.getElementById('content').innerHTML = "我的主页"
+      } else if (location.hash === '#/myfrend') {
+        document.getElementById('content').innerHTML = "朋友"
+      } else if (location.hash === '#/music') {
+        document.getElementById('content').innerHTML = "音乐"
+      }
+    }
+
+    // 当页面dom加载完成时，就会自动执行
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('DOMContentLoaded')
+      hashChange()
+    })
+
+    // 当地址栏中的hash值变化时，就会自动执行
+    window.addEventListener('hashchange', () => {
+      console.log(location)
+      console.log(location.hash)
+      hashChange()
+    })
+  </script>
+</body>
+
+</html>

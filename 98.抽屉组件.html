@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>案例-折叠面板</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+  <style>
+    body {
+      background-color: #eee;
+    }
+
+    #app {
+      background-color: #fff;
+      width: 500px;
+      margin: 50px auto;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5);
+      padding: 2em;
+    }
+
+    .box {
+      padding: 1em;
+      border: 1px solid #ccc;
+      margin: 1em;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      background-color: #ccc;
+    }
+
+    .title span {
+      cursor: pointer;
+    }
+
+    .content {
+      text-align: center;
+    }
+
+    .poetry {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h3>最多只能打开一个</h3>
+    <my-poetry v-for="(item,index) in list" :key="item.id" :id="curid" :poetry="item" @switch="hSwitch"></my-poetry>
+  </div>
+  <script>
+    // component 组件
+    // template: 模板 ---- 类似于el
+    Vue.component('MyPoetry', {
+      props: ['poetry', 'id'],
+      filters: {
+        fBreak(val) {
+          return val.replace(new RegExp("[,。，]", 'g'), function ($1) {
+            return $1 + '</br>'
+          })
+        }
+      },
+      computed: {
+        cContent: function () {
+          // 加上换行
+          return this.poetry.content.replace(new RegExp("[,。]", 'g'), function ($1) {
+            return $1 + '</br>'
+          })
+        },
+        cIsShow() {
+          return this.poetry.id === this.id
+        }
+      },
+      methods: {
+        hSwitch() {
+          if (this.cIsShow) {
+            this.$emit('switch', -1)
+          } else {
+            this.$emit('switch', this.poetry.id)
+          }
+        }
+      },
+      template: `
+          <div class="poetry">
+            <div class="title">
+              <label>{{poetry.author}}-{{poetry.title}}</label>
+              <span v-on:click="hSwitch">
+                {{ cIsShow ? "收起" : "展开" }}
+              </span>
+            </div>
+            <div class="content" v-show="cIsShow"
+            v-html="cContent">
+            </div>
+          </div>
+          `
+    })
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        curid: 2,
+        list: [
+          {
+            id: 1,
+            title: '洛阳陌',
+            author: '李白',
+            content: '白玉谁家郎,回车渡天津。看花东陌上,惊动洛阳人。'
+          },
+          {
+            id: 2,
+            title: '静夜思',
+            author: '李白',
+            content: '床前明月光,疑是地上霜。举头望明月,低头思故乡。'
+          },
+          {
+            id: 3,
+            title: '赠汪伦',
+            author: '李白',
+            content: '李白乘舟将欲行,忽闻岸上踏歌声。花潭水深千尺,不及汪伦送我情。'
+          }
+        ]
+      },
+      methods: {
+        hSwitch(id) {
+          console.log(id)
+          this.curid = id
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
