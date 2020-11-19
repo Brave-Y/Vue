@@ -1,0 +1,6 @@
+@import "style.css";
+body div {
+  padding: 50px;
+  display: flex;
+  font-size: 100px;
+}

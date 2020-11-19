@@ -1,0 +1,17 @@
+@import "public.css";
+@import "iconfont.css";
+
+div {
+    border: 4px solid #ccc;
+    width: 50%;
+    height: 200px;
+    margin: 30px auto;
+    box-shadow: 3px 3px 3px #ccc;
+    background-color: pink;
+    text-align: center;
+    background-image: url('../img/webpack.png')
+}
+
+body {
+    background-image: url('../img/webpack.svg')
+}
