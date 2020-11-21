@@ -30,48 +30,47 @@
 
 <body>
     <div id='app'>
-        <h2>页面</h2>
+        <h2>页面跳转及传参</h2>
         <div>
             <router-link to='/'>我的主页</router-link>
-            <router-link to='/news'>新闻</router-link>
-            <router-link to='/sport'>运动</router-link>
+            <router-link to='/news'>新闻页</router-link>
+            <router-link to='/sport'>运动页</router-link>
+            <hr>
         </div>
-        <hr>
         <router-view></router-view>
     </div>
     <script>
-        const abc = new VueRouter({
+        const router = new VueRouter({
             routes: [
                 {
                     path: '/',
                     component: {
                         template: `
-                <div> 主页
-                    跳入新闻列表页有两种方式：<br>
-                    1. router-link
+                    <div>
+                    1.跳转新闻页
                     <br>
-                    <router-link to="/news">新闻列表</router-link>
+                    <router-link to='/news'>跳转新闻页</router-link>
                     <br>
-                    2. router-link
+                    2.跳转新闻页并传参
                     <br>
-                    <router-link to="/news?a=1&b=2">跳到新闻列表并传入a=1&b=2</router-link>
+                    <router-link to='/news?a=1&b=2'>去新闻页传参</router-link>
                     <br>
-                    3. 通过代码 $router.push(地址)
-                    <button @click="hJump">去到新闻列表</button>
+                    3.方法传参
                     <br>
-                    4. 动态路由传参
-                    <router-link to="/sport/100">跳到运动页面并传入100</router-link>
-                    </br>
-                    <button @click="hJumpToSport100">跳到运动页面并传入100</button></div>
-                `,
+                    <button @click='zou'>点击跳转</button>
+                    <br>
+                    4.动态路由传参
+                    <router-link to='/sport?a=4&b=2'>去运动页传参</router-link>
+                    <br>
+                    <button @click='qu'>去运动页传参</button>
+                    </div>
+                    `,
                         methods: {
-                            hJumpToSport100() {
-                                // alert(1)
-                                this.$router.push('/sport/100')
+                            zou() {
+                                this.$router.push('/news?a=2&b=3')
                             },
-                            hJump() {
-                                // alert(1)
-                                this.$router.push('/news')
+                            qu() {
+                                this.$router.push('sport?a=666&b=777')
                             }
                         }
                     }
@@ -80,39 +79,38 @@
                     path: '/news',
                     component: {
                         template: `
-                <div>新闻列表</br>
-                接收通过查询地址符串的地址传入的参数 </br>
-                格式：$route.query.参数名
-                <hr>
-                从查询字符串中获取的参数a是：{{$route.query.a}}</br>
-                从查询字符串中获取的参数b是：{{$route.query.b}}</div>
-                `,
-                        methods: {
-
-                        }
+                    <div>
+                        我是新闻页
+                        <br>
+                        接受到的数据a：{{$route.query.a}}<br>
+                        接受到的数据b：{{$route.query.b}}<br>
+                        </div>
+                    `
                     }
                 },
                 {
-                    path: '/sport/:id',
+                    path: '/sport',
                     component: {
                         template: `
-                <div>运动--{{$route.params.id}}</div>
-                `,
-                        methods: {
-
-                        }
+                    <div>
+                        我是运动页
+                        <br>
+                        接受到的数据a：{{$route.query.a}}<br>
+                        接受到的数据b：{{$route.query.b}}<br>
+                        </div>
+                    `
                     }
                 },
             ]
         })
-
         new Vue({
             el: '#app',
-            router: abc,
-            data: {},
+            router,
+            data: {
+
+            }
         })
     </script>
-
 
 
 

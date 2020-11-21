@@ -54,6 +54,10 @@
     const abc = new VueRouter({
       routes: [
         {
+          path: '/test',
+          redirect: '/'
+        },
+        {
           path: '/',
           component: {
             template: `
@@ -61,19 +65,19 @@
                     主页
                     跳入新闻列表页有两种方式：
                     1. router-link
-                    </br>
+                    <br>
                     <router-link to="/news">新闻列表</router-link>
-                    </hr>
+                    <hr>
                     2. router-link
-                    </br>
+                    <br>
                     <router-link to="/news?a=1&b=2">跳到新闻列表并传入a=1&b=2</router-link>
-                    </hr>
+                    <hr>
                     3. 通过代码 $router.push(地址)
                     <button @click="hJump">去到新闻列表</button>
-                    </hr>
+                    <hr>
                     4. 动态路由传参
                     <router-link to="/sport/100">跳到运动页面并传入100</router-link>
-                    </br>
+                    <br>
                     <button @click="hJumpToSport100">跳到运动页面并传入100</button>
                 </div>`,
             methods: {

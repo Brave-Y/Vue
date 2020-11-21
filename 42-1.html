@@ -30,15 +30,14 @@
 
 <body>
     <div id='app'>
-        <h2>html页面</h2>
+        <h2>页面跳转</h2>
         <div>
             <router-link to='/'>我的主页</router-link>
-            <router-link to='/news'>新闻</router-link>
-            <router-link to='/sport'>运动</router-link>
+            <router-link to='/add'>添加页</router-link>
+            <router-link to='/edit'>编辑页</router-link>
             <hr>
+            <router-view></router-view>
         </div>
-        <router-view></router-view>
-
     </div>
     <script>
         const abc = new VueRouter({
@@ -47,43 +46,41 @@
                     path: '/',
                     component: {
                         template: `
-                    <div>
-                    主页
-                    </div>
-                    `
-                    },
+                        <div>
+                            我是主页
+                            </div>
+                        `
+                    }
                 },
                 {
-                    path: '/news',
+                    path: '/add',
                     component: {
                         template: `
-                    <div>
-                 新闻列表</br>
-                <router-link to="/detail/100">100号新闻</router-link></br>
-                <router-link to="/detail/101">101号新闻</router-link></br>
-                <router-link to="/detail/102">102号新闻</router-link></br>
-                <router-link to="/detail/103">103号新闻</router-link></br>
-                    </div>
-                    `
-                    },
+                        <div>
+                            我是添加页
+                            </div>
+                        `
+                    }
                 },
                 {
-                    path: '/sport',
+                    path: '/edit',
                     component: {
                         template: `
-                    <div>
-                    3
-                    </div>
-                    `
-                    },
-                },
+                        <div>
+                            我是编辑页
+                            </div>
+                        `
+                    }
+                }
             ]
         })
         new Vue({
             el: '#app',
             router: abc,
-            data: {},
+            data: {
+            }
         })
+
     </script>
 </body>
 
