@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>学习组件上的v-model</title>
+ <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+ <style>
+   body{
+     background-color: #eee;
+   }
+   #app{
+     background-color:#fff;
+     width: 500px;
+     margin: 50px auto;
+     box-shadow: 3px 3px 3px rgba(0 , 0, 0, 0.5);padding:2em;
+    }
+   .box{
+     padding: 1em;
+     border:1px solid #ccc;
+     margin:1em;
+   }
+   </style>
+ </head>
+ <body>
+   <div id="app">
+     <h2>学习组件上的v-model-1111</h2>
+     <!-- v-model的双向
+     1. 你可以从父组件中传值给子组件。
+     2. 子组件内部修改这个值，也会反映到父组件中的数据
+      v-model就是一个语法糖： 帮助程序员，快速地实现：给子组件上添加一个名为value的属性，同时监听
+      一个名为input的事件，在事件的回调中去修改父组件的数据。
+    -->
+     <!-- 如果给自定义组件上添加v-model，则相当于：
+     1. 给这个组件传递了一个名为value的属性，值就是你传入的数据的值
+     2. 在这个组件上监听input事件，并在回调函数中将收到的值写回到v-model绑定的数据项中
+    -->
+     <input type="text" v-model="msg"> {{msg}}
+     <my-com1 v-model="msg"></my-com1>
+     <hr>
+     <my-com1 :value="msg" @input="hInput" ></my-com1>
+   </div>
+   <script>
+     // 不能直接修改从父组件中通过props传入的数据
+     Vue.component("MyCom1", {
+       props: ['value'],
+       template: `
+        <div>
+          mycom1 --- {{value}} -<button @click="h1">修改数据</button>
+        </div>
+       `,
+       methods: {
+         h1 () {
+          //  this.value = 100
+          this.$emit('input', 100)
+         }
+       }
+     })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          msg: 'vue.js'
+        },
+        methods: {
+          hInput (val) {
+            console.log('从子组件中传出的值', val)
+            this.msg = val
+          }
+        }
+      })
+   </script>
+ </body>
+</html>

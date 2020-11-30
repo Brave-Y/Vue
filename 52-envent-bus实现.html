@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>html页面</title>
+ <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+ <style>
+   body{
+     background-color: #eee;
+   }
+   #app{
+     background-color:#fff;
+     width: 500px;
+     margin: 50px auto;
+     box-shadow: 3px 3px 3px rgba(0 , 0, 0, 0.5);padding:2em;
+    }
+   .box{
+     padding: 1em;
+     border:1px solid #ccc;
+     margin:1em;
+   }
+   </style>
+ </head>
+ <body>
+   <div id="app">
+     <h2>html页面</h2>
+     <hr>
+     <son-a></son-a>
+     <hr>
+      <son-b></son-b>
+      <hr>
+      <son-c></son-c>
+   </div>
+   <script>
+
+     // 第三方：
+     //  1.所有的组件都可以访问.所以我们把它挂到Vue的原型上
+     //  2.还要具备收集事件，发布事件的能力，它不能是一个普通的对象。这里我们用Vue的实例来充当
+     //  对于Vue的实例来说，它有两个方法就是我们这里需要
+     //   - $on  (事件名， 回调(定义形参)): 监听事件，当事件发生，它就执行回调，并接收实参
+     //   - $emit(事件名, 实参): 发布事件。 第二个参数就表示本次事件发布时，携带的参数
+      Vue.prototype.$eventBus = new Vue()
+
+      // 下面的组件可以认为是通过  new Vue()这种方式创建出来的。
+      // 按原型链的原理，它们都可以访问:$eventBus
+      Vue.component('son-a', {
+        template:`
+          <div>
+            我是A儿子 <button @click="hAdd">点我，我兄弟的值+1</button>
+            我是A儿子 <button @click="hAdd1">点我，给我的兄弟随机加数值</button>
+          </div>
+        `,
+        methods: {
+          hAdd () {
+
+            // console.log(this.$eventBus)
+            // console.log(this.$eventBus.$on)
+            // console.log(this.$eventBus.$emit)
+            this.$eventBus.$emit('a-click')
+            // alert(this.$eventBus)
+          },
+          hAdd1 () {
+            // 调用$emit，发布事件a-click-random 并传入实参：Math.random() 
+            this.$eventBus.$emit('a-click-random', Math.random())
+          }
+        }
+      })
+
+      Vue.component('son-b', {
+        created () {
+          // 监听事件， 订阅事件
+          // 当这个事件发生时，就会执行回调
+          this.$eventBus.$on('a-click', ()=>{
+            // console.log(this.n)
+            console.log('我是son-b，我收到了a-click事件')
+            this.n++
+          })
+          this.$eventBus.$on('a-click-random', (a)=>{
+            // console.log(this.n)
+            console.log('我是son-b，我收到了a-click-random事件,收到的值是', a)
+            this.n += a
+          })
+        },
+        data () {
+          return {
+            n: 1
+          }
+        },
+        template:`
+          <div>
+            我是B儿子,  {{n}}
+          </div>
+        `
+      })
+
+      Vue.component('son-c', {
+        created () {
+          this.$eventBus.$on('a-click', ()=>{
+            // console.log(this.n)
+            // alert('我是son-b，我收到了a-click事件')
+            this.n--
+          })
+        },
+        data () {
+          return {
+            n: 100
+          }
+        },
+        template:`
+          <div>
+            我是C儿子,  {{n}}
+          </div>
+        `
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          msg: 0
+        }
+      })
+   </script>
+ </body>
+</html>

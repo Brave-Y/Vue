@@ -50,7 +50,7 @@ const router = new VueRouter({
 new Vue({
     router: router,
     //vue的配置项，名为render，值是函数
-    //功能：把app这个组件
+    // 功能： 把app这个组件手挂载到vue实例 ------ vue实例中就只一个根组件
     render: function (h) {
         return h(app)
     }

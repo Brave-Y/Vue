@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>生命周期 钩子函数</title>
+ <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+ <style>
+   body{
+     background-color: #eee;
+   }
+   #app{
+     background-color:#fff;
+     width: 500px;
+     margin: 50px auto;
+     box-shadow: 3px 3px 3px rgba(0 , 0, 0, 0.5);padding:2em;
+    }
+   .box{
+     padding: 1em;
+     border:1px solid #ccc;
+     margin:1em;
+   }
+   </style>
+ </head>
+ <body>
+   <div id="app">
+     <h2>生命周期 钩子函数</h2>
+     组件创建，更新，销毁这个过程要经历的几个关键点。
+     <hr>
+     <son v-if="isShow"></son>
+   </div>
+   <script>
+      Vue.component('son', {
+        beforeCreate () {
+          console.log('beforeCreate.....')
+        },
+        // 1. created中去发ajax
+        // 2. 此时dom并没有就绪，这里不能访问dom结构
+        created() {
+          console.log('created.....')
+          console.log(this.$el)
+          this.timer = setInterval(() => {
+            this.n++
+            console.log(this.n)
+          }, 1000)
+        },
+        beforeMount() {
+          console.log('beforeMount......')
+        },
+        // 1. 在mounted中也可以发ajax
+        // 2. 在这里就可以访问dom结构
+        mounted() {
+          console.log('mounted......')
+          console.log(this.$el.innerHTML)
+        },
+        // UI更新
+        beforeUpdate () {
+          console.log('beforeUpdate......')
+        },
+        updated () {
+          console.log('updated......')
+        },
+        beforeDestroy() {
+          console.log('beforeDestory......')
+        },
+        destroyed () {
+          console.log('destroyed......')
+          clearInterval(this.timer)
+        },
+        template:`
+          <div>
+            我是子组件 {{n}}
+          </div>
+        `,
+        data () {
+          return {
+            n: 1
+          }
+        }
+      })
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          isShow: true
+        }
+      })
+   </script>
+ </body>
+</html>
